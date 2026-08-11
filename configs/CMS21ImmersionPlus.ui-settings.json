@@ -1,0 +1,151 @@
+{
+  "modId": "CMS21ImmersionPlus",
+  "displayName": "CMS21 Immersion+",
+  "displayNameKey": "LOC_CMS21ImmersionPlus_DisplayName",
+  "config": {
+    "path": "CMS21ImmersionPlus.cfg",
+    "format": "toml",
+    "section": "CMS21ImmersionPlus.Settings"
+  },
+  "groups": [
+    {
+      "id": "effects",
+      "order": 10,
+      "nameKey": "LOC_CMS21ImmersionPlus_Group_effects",
+      "name": "Visual effects"
+    },
+    {
+      "id": "vehicles",
+      "order": 20,
+      "nameKey": "LOC_CMS21ImmersionPlus_Group_vehicles",
+      "name": "Vehicles and authenticity"
+    },
+    {
+      "id": "locations",
+      "order": 30,
+      "nameKey": "LOC_CMS21ImmersionPlus_Group_locations",
+      "name": "Locations"
+    }
+  ],
+  "settings": [
+    {
+      "id": "FID_RemoveDynoMenuBlur",
+      "key": "removeDynoMenuBlur",
+      "group": "effects",
+      "type": "boolean",
+      "default": true,
+      "applyMode": "restartGame",
+      "order": 10,
+      "nameKey": "LOC_SettingRemoveDynoMenuBlurName",
+      "descriptionKey": "LOC_SettingRemoveDynoMenuBlurDescription"
+    },
+    {
+      "id": "FID_UseAuthenticCarNames",
+      "key": "useAuthenticCarNames",
+      "group": "vehicles",
+      "type": "boolean",
+      "default": true,
+      "applyMode": "restartGame",
+      "order": 10,
+      "nameKey": "LOC_SettingUseAuthenticCarNamesName",
+      "descriptionKey": "LOC_SettingUseAuthenticCarNamesDescription"
+    },
+    {
+      "id": "FID_LoadBrandLogosFromMods",
+      "key": "loadBrandLogosFromMods",
+      "group": "vehicles",
+      "type": "boolean",
+      "default": true,
+      "applyMode": "restartGame",
+      "order": 20,
+      "nameKey": "LOC_SettingLoadBrandLogosFromModsName",
+      "descriptionKey": "LOC_SettingLoadBrandLogosFromModsDescription"
+    },
+    {
+      "id": "FID_LoadBrandLogosFromTKAftermarket",
+      "key": "loadBrandLogosFromTKAftermarket",
+      "group": "vehicles",
+      "type": "boolean",
+      "default": false,
+      "applyMode": "restartGame",
+      "order": 30,
+      "nameKey": "LOC_SettingLoadBrandLogosFromTKAftermarketName",
+      "descriptionKey": "LOC_SettingLoadBrandLogosFromTKAftermarketDescription"
+    },
+    {
+      "id": "FID_LoadTexturesFromFolder",
+      "key": "loadTexturesFromFolder",
+      "group": "vehicles",
+      "type": "boolean",
+      "default": true,
+      "applyMode": "restartGame",
+      "order": 40,
+      "nameKey": "LOC_SettingLoadTexturesFromFolderName",
+      "descriptionKey": "LOC_SettingLoadTexturesFromFolderDescription"
+    },
+    {
+      "id": "FID_ShowPlayerNameOnShowroomLicencePlates",
+      "key": "showPlayerNameOnShowroomLicencePlates",
+      "group": "vehicles",
+      "type": "boolean",
+      "default": true,
+      "applyMode": "restartGame",
+      "order": 50,
+      "nameKey": "LOC_SettingShowPlayerNameOnShowroomLicencePlatesName",
+      "descriptionKey": "LOC_SettingShowPlayerNameOnShowroomLicencePlatesDescription"
+    },
+    {
+      "id": "FID_PreloadAllParkingSceneVehicles",
+      "key": "preloadAllParkingSceneVehicles",
+      "group": "locations",
+      "type": "boolean",
+      "default": true,
+      "applyMode": "restartGame",
+      "order": 10,
+      "nameKey": "LOC_SettingPreloadAllParkingSceneVehiclesName",
+      "descriptionKey": "LOC_SettingPreloadAllParkingSceneVehiclesDescription"
+    }
+  ],
+  "localization": {
+    "en": {
+      "LOC_CMS21ImmersionPlus_DisplayName": "CMS21 Immersion+",
+      "LOC_CMS21ImmersionPlus_Group_effects": "Visual effects",
+      "LOC_CMS21ImmersionPlus_Group_vehicles": "Vehicles and authenticity",
+      "LOC_CMS21ImmersionPlus_Group_locations": "Locations",
+      "LOC_SettingUseAuthenticCarNamesName": "Authentic vehicle names",
+      "LOC_SettingUseAuthenticCarNamesDescription": "Apply vehicle names and brands from AuthenticCarNames.cfg.",
+      "LOC_SettingLoadBrandLogosFromModsName": "Workshop brand logos",
+      "LOC_SettingLoadBrandLogosFromModsDescription": "Load brand logos supplied by Workshop vehicle mods.",
+      "LOC_SettingLoadBrandLogosFromTKAftermarketName": "TK Aftermarket logos",
+      "LOC_SettingLoadBrandLogosFromTKAftermarketDescription": "Also read brand logos from Mods\\TKAftermarket\\brands when available.",
+      "LOC_SettingLoadTexturesFromFolderName": "Local texture replacements",
+      "LOC_SettingLoadTexturesFromFolderDescription": "Load local brand logos and scene or vehicle texture replacements.",
+      "LOC_SettingShowPlayerNameOnShowroomLicencePlatesName": "Player name on showroom plates",
+      "LOC_SettingShowPlayerNameOnShowroomLicencePlatesDescription": "Show the current player name on licence plates in Showroom and Auto Salon.",
+      "LOC_SettingPreloadAllParkingSceneVehiclesName": "Preload parking vehicles",
+      "LOC_SettingPreloadAllParkingSceneVehiclesDescription": "Keep all ten vehicles in the selected parking alley loaded and visible.",
+      "LOC_SettingRemoveDynoMenuBlurName": "Dyno window without blur",
+      "LOC_SettingRemoveDynoMenuBlurDescription": "Disable the menu blur behind the dyno window."
+    },
+    "ru": {
+      "LOC_CMS21ImmersionPlus_DisplayName": "CMS21 Immersion+",
+      "LOC_CMS21ImmersionPlus_Group_effects": "Визуальные эффекты",
+      "LOC_CMS21ImmersionPlus_Group_vehicles": "Автомобили и аутентичность",
+      "LOC_CMS21ImmersionPlus_Group_locations": "Локации",
+      "LOC_SettingUseAuthenticCarNamesName": "Настоящие названия автомобилей",
+      "LOC_SettingUseAuthenticCarNamesDescription": "Применять названия автомобилей и брендов из AuthenticCarNames.cfg.",
+      "LOC_SettingLoadBrandLogosFromModsName": "Логотипы брендов из Workshop",
+      "LOC_SettingLoadBrandLogosFromModsDescription": "Загружать логотипы брендов из автомобильных модов Workshop.",
+      "LOC_SettingLoadBrandLogosFromTKAftermarketName": "Логотипы TK Aftermarket",
+      "LOC_SettingLoadBrandLogosFromTKAftermarketDescription": "Дополнительно читать логотипы из Mods\\TKAftermarket\\brands, если каталог существует.",
+      "LOC_SettingLoadTexturesFromFolderName": "Локальные замены текстур",
+      "LOC_SettingLoadTexturesFromFolderDescription": "Загружать локальные логотипы и замены текстур сцен и автомобилей.",
+      "LOC_SettingShowPlayerNameOnShowroomLicencePlatesName": "Имя игрока на номерах автосалона",
+      "LOC_SettingShowPlayerNameOnShowroomLicencePlatesDescription": "Показывать имя текущего игрока на номерах в Showroom и Auto Salon.",
+      "LOC_SettingPreloadAllParkingSceneVehiclesName": "Предзагрузка машин парковки",
+      "LOC_SettingPreloadAllParkingSceneVehiclesDescription": "Оставлять загруженными и видимыми все десять автомобилей выбранной аллеи парковки.",
+      "LOC_SettingRemoveDynoMenuBlurName": "Диностенд без размытия",
+      "LOC_SettingRemoveDynoMenuBlurDescription": "Отключать размытие меню за окном диностенда."
+    }
+  }
+}
