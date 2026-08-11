@@ -23,9 +23,9 @@ using CMS.SceneLoaders;
 
 namespace Cms21ImmersionPlus
 {
-    /// <summary>Loads local brand logos and mapped texture replacements from module-owned folders.</summary>
+    /// <summary>Loads local visual replacements for vehicle brands, models and related thumbnails from module-owned folders.</summary>
     [HarmonyPatch]
-    public static class TextureReplacementFeature
+    public static class VehicleVisualReplacementFeature
     {
         private const int MaximumWaitFrames = 600;
 
@@ -36,8 +36,7 @@ namespace Cms21ImmersionPlus
         private static readonly Dictionary<string, string> RuntimeTextureNames =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 { "CallopeInterior", "int_callope" },
-                { "LavetinoInteriorDiffuse", "lavetino_int_d" },
-                { "ContainerDecal02Color", "ContainerDecal02_color" }
+                { "LavetinoInteriorDiffuse", "lavetino_int_d" }
             };
 
         private static readonly Dictionary<string, string> RuntimeBrandNames =
@@ -52,7 +51,7 @@ namespace Cms21ImmersionPlus
         private static bool IsEnabled {
             get {
                 return Main.SettingsEntry != null &&
-                    Main.SettingsEntry.Value.loadTexturesFromFolder;
+                    Main.SettingsEntry.Value.loadVehicleVisualReplacements;
             }
         }
 
@@ -77,12 +76,6 @@ namespace Cms21ImmersionPlus
             return true;
         }
 
-        public static void OnSceneInitialized(string sceneName)
-        {
-            if (IsEnabled)
-                MelonCoroutines.Start(ReplaceTextures(sceneName));
-        }
-
         [HarmonyPatch(typeof(CarLoader), nameof(CarLoader.LoadAndPrepareModel))]
         [HarmonyPrefix]
         public static void LoadAndPrepareModelPrefix(CarLoader __instance)
@@ -100,84 +93,38 @@ namespace Cms21ImmersionPlus
                 yield return new WaitForEndOfFrame();
             }
 
-            if (loader == null || !loader.done || !loader.modelLoaded)
+            if (loader == null)
+                yield break;
+            if (!loader.done || !loader.modelLoaded)
                 yield break;
 
-            yield return ReplaceTextures("CarLoader", loader);
+            yield return ReplaceCarLoaderTextures(loader);
         }
 
-        private static IEnumerator ReplaceTextures(string sceneName,
-            CarLoader loader = null)
+        private static IEnumerator ReplaceCarLoaderTextures(CarLoader loader)
         {
-            string textureRoot =
-                Path.GetFullPath(GlobalConfig.directoryTextureReplacements);
-            string directory = sceneName == "CarLoader"
-                ? Path.Combine(textureRoot, "CarLoader")
-                : Path.Combine(textureRoot, "Scenes", sceneName);
+            string directory = Path.Combine(
+                Path.GetFullPath(GlobalConfig.directoryTextureReplacements),
+                "CarLoader");
+            if (!EnsureCarLoaderCache(directory) || carLoaderTextures.Count == 0 ||
+                loader == null)
+                yield break;
 
-            if (sceneName == "CarLoader") {
-                if (!EnsureCarLoaderCache(directory) || carLoaderTextures.Count == 0 ||
-                    loader == null)
+            int waitedFrames = 0;
+            while (SceneLoader.blockProgress && waitedFrames < MaximumWaitFrames) {
+                if (loader == null)
                     yield break;
-
-                int waitedFrames = 0;
-                while (SceneLoader.blockProgress &&
-                    waitedFrames < MaximumWaitFrames) {
-                    if (loader == null)
-                        yield break;
-                    waitedFrames++;
-                    yield return new WaitForEndOfFrame();
-                }
-                if (SceneLoader.blockProgress || loader == null)
-                    yield break;
-
-                int carLoaderReplaced = ReplaceTexturesOnObject(loader.gameObject,
-                    carLoaderTextures);
-                if (carLoaderReplaced > 0) {
-                    ModLogger.Log("[Textures] Replaced " + carLoaderReplaced +
-                        " texture(s) on object '" + loader.gameObject.name + "'.",
-                        Types.LoggingLevels.Debug);
-                }
-                yield break;
-            }
-
-            if (!Directory.Exists(directory))
-                yield break;
-
-            Dictionary<string, byte[]> replacements =
-                LoadTextureFiles(directory, "[Textures] Failed to read scene texture");
-            if (replacements.Count == 0)
-                yield break;
-
-            int waitFrames = 0;
-            while (SceneLoader.blockProgress && waitFrames < MaximumWaitFrames) {
-                waitFrames++;
+                waitedFrames++;
                 yield return new WaitForEndOfFrame();
             }
-            if (SceneLoader.blockProgress)
+            if (loader == null || SceneLoader.blockProgress)
                 yield break;
 
-            UnityEngine.SceneManagement.Scene scene =
-                UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
-            if (!scene.isLoaded)
+            GameObject model = loader.GetModel();
+            if (model == null)
                 yield break;
 
-            Il2CppReferenceArray<GameObject> rootObjects =
-                scene.GetRootGameObjects();
-            if (rootObjects == null)
-                yield break;
-
-            int replaced = 0;
-            foreach (GameObject rootObject in rootObjects) {
-                if (rootObject != null)
-                    replaced += ReplaceTexturesOnObject(rootObject, replacements);
-            }
-
-            if (replaced > 0) {
-                ModLogger.Log("[Textures] Replaced " + replaced +
-                    " texture(s) for scene '" + sceneName + "'.",
-                    Types.LoggingLevels.Normal);
-            }
+            ReplaceTexturesOnObject(model, carLoaderTextures);
         }
 
         private static bool EnsureCarLoaderCache(string directory)
@@ -240,7 +187,7 @@ namespace Cms21ImmersionPlus
                 Sprite sprite = TextureLoader.LoadSpriteFromBytes(data.Value);
                 if (sprite == null)
                     continue;
-                sprite.name = data.Key + "_cms21uiplus";
+                sprite.name = data.Key + "_cms21immersionplus";
                 sprite.texture.name = sprite.name;
                 inventory.Thumbnails[data.Key] = sprite;
                 replaced++;
@@ -261,7 +208,7 @@ namespace Cms21ImmersionPlus
             int replaced = 0;
             foreach (Renderer renderer in
                 gameObject.GetComponentsInChildren<Renderer>(true)) {
-                foreach (Material material in renderer.materials)
+                foreach (Material material in renderer.sharedMaterials)
                     replaced += ReplaceTexturesOnMaterial(material, replacements);
             }
             return replaced;
@@ -286,7 +233,7 @@ namespace Cms21ImmersionPlus
                 Texture2D texture2D = texture.TryCast<Texture2D>();
                 if (texture2D != null &&
                     ImageConversion.LoadImage(texture2D, replacement)) {
-                    texture.name += "_cms21uiplus";
+                    texture.name += "_cms21immersionplus";
                     replaced++;
                 }
             }

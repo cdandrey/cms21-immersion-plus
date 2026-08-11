@@ -91,8 +91,7 @@ $releaseResourceFiles = @(
     "BrandLogos/WayneTech.png",
     "BrandLogos/Yamaha.png",
     "TextureReplacements/CarLoader/CallopeInterior.png",
-    "TextureReplacements/CarLoader/LavetinoInteriorDiffuse.png",
-    "TextureReplacements/Scenes/garage/ContainerDecal02Color.png"
+    "TextureReplacements/CarLoader/LavetinoInteriorDiffuse.png"
 )
 
 function Get-ProjectLibraryReferences {

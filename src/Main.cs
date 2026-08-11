@@ -36,12 +36,13 @@ namespace Cms21ImmersionPlus
         private static bool dataInitializationWorkerRunning;
         private static bool authenticCarNamesInitialized;
         private static bool brandLogosInitialized;
-        private static bool textureDataInitialized;
+        private static bool vehicleVisualReplacementsInitialized;
 
         public static MelonPreferences_Entry<Settings> SettingsEntry;
 
         public override void OnLateInitializeMelon()
         {
+            ModLogger.InitializeDebugFile();
             string startMessage = BuildInfo.Name + " v" + BuildInfo.Version +
                 " initializing; Unity " + Application.unityVersion + ", game " +
                 GameSettings.BuildVersion + ".";
@@ -76,7 +77,7 @@ namespace Cms21ImmersionPlus
         {
             if (!initialized || buildIndex == -1)
                 return;
-            TextureReplacementFeature.OnSceneLoaded(sceneName);
+            VehicleVisualReplacementFeature.OnSceneLoaded(sceneName);
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
@@ -93,7 +94,6 @@ namespace Cms21ImmersionPlus
                 if (!AreGameDataFeaturesInitialized() && !dataInitializationWorkerRunning)
                     MelonCoroutines.Start(InitializeGameDataFeatures());
             }
-            TextureReplacementFeature.OnSceneInitialized(sceneName);
         }
 
         private static IEnumerator InitializeGameDataFeatures()
@@ -123,8 +123,8 @@ namespace Cms21ImmersionPlus
                 authenticCarNamesInitialized = TryInitializeFeature("AuthenticCarNames", AuthenticCarNamesFeature.Apply);
             if (!brandLogosInitialized)
                 brandLogosInitialized = TryInitializeFeature("BrandLogos", BrandLogoFeature.Apply);
-            if (!textureDataInitialized)
-                textureDataInitialized = TryInitializeFeature("TextureReplacements", TextureReplacementFeature.OnGameDataReady);
+            if (!vehicleVisualReplacementsInitialized)
+                vehicleVisualReplacementsInitialized = TryInitializeFeature("VehicleVisualReplacements", VehicleVisualReplacementFeature.OnGameDataReady);
         }
 
         private static bool TryInitializeFeature(string name, Func<bool> initializer)
@@ -139,7 +139,7 @@ namespace Cms21ImmersionPlus
 
         private static bool AreGameDataFeaturesInitialized()
         {
-            return authenticCarNamesInitialized && brandLogosInitialized && textureDataInitialized;
+            return authenticCarNamesInitialized && brandLogosInitialized && vehicleVisualReplacementsInitialized;
         }
 
         private void ApplyHarmonyPatches()

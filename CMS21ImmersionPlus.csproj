@@ -34,7 +34,7 @@
     <Compile Include="src\Config.cs" />
     <Compile Include="src\Features\Brands\BrandLogoFeature.cs" />
     <Compile Include="src\Features\Parking\ParkingSceneVehiclePreloadFeature.cs" />
-    <Compile Include="src\Features\Textures\TextureReplacementFeature.cs" />
+    <Compile Include="src\Features\Textures\VehicleVisualReplacementFeature.cs" />
     <Compile Include="src\Features\UI\ShowroomLicencePlateFeature.cs" />
     <Compile Include="src\Features\Vehicles\AuthenticCarNamesFeature.cs" />
     <Compile Include="src\Infrastructure\ModLogger.cs" />

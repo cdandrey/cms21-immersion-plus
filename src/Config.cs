@@ -16,8 +16,8 @@ namespace Cms21ImmersionPlus
         public bool loadBrandLogosFromMods = true;
         [Tomlet.Attributes.TomlInlineComment("Also import brand logos from Mods\\TKAftermarket\\brands when present")]
         public bool loadBrandLogosFromTKAftermarket = false;
-        [Tomlet.Attributes.TomlInlineComment("Load local brand logos and scene/car texture replacements")]
-        public bool loadTexturesFromFolder = true;
+        [Tomlet.Attributes.TomlInlineComment("Load local visual replacements for vehicle brands, models and related thumbnails")]
+        public bool loadVehicleVisualReplacements = true;
         [Tomlet.Attributes.TomlInlineComment("Keep all ten vehicles visible in the current parking alley")]
         public bool preloadAllParkingSceneVehicles = true;
         [Tomlet.Attributes.TomlInlineComment("Show the current player name on showroom licence plates")]
@@ -31,6 +31,7 @@ namespace Cms21ImmersionPlus
         public static readonly string directoryBrandLogos = @"Mods\CMS21ImmersionPlus\BrandLogos\";
         public static readonly string directoryTKAftermarketBrands = @"Mods\TKAftermarket\brands\";
         public static readonly string directoryTextureReplacements = @"Mods\CMS21ImmersionPlus\TextureReplacements\";
+        public static readonly string debugLogFile = @"Mods\CMS21ImmersionPlus\CMS21ImmersionPlus.debug.log";
     }
 
     public static class GlobalState

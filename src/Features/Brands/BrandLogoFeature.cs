@@ -33,6 +33,10 @@ namespace Cms21ImmersionPlus
                 GlobalState.GameManager.CarBundleLoader == null)
                 return false;
 
+            GameInventory inventory = Singleton<GameInventory>.Instance;
+            if (inventory == null || inventory.partPropertyList == null)
+                return false;
+
             try {
                 HashSet<string> modCarIds =
                     new HashSet<string>(StringComparer.Ordinal);
@@ -53,10 +57,6 @@ namespace Cms21ImmersionPlus
 
                 if (Main.SettingsEntry.Value.loadBrandLogosFromTKAftermarket)
                     AddTkAftermarketLogos(candidates, candidateNames);
-
-                GameInventory inventory = Singleton<GameInventory>.Instance;
-                if (inventory == null || inventory.partPropertyList == null)
-                    return false;
 
                 NormalizeModPartBrands(inventory, modCarIds);
                 int added = InstallMissingLogos(inventory, candidates);

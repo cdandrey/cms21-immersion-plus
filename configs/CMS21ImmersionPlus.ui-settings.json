@@ -73,15 +73,15 @@
       "descriptionKey": "LOC_SettingLoadBrandLogosFromTKAftermarketDescription"
     },
     {
-      "id": "FID_LoadTexturesFromFolder",
-      "key": "loadTexturesFromFolder",
+      "id": "FID_LoadVehicleVisualReplacements",
+      "key": "loadVehicleVisualReplacements",
       "group": "vehicles",
       "type": "boolean",
       "default": true,
       "applyMode": "restartGame",
       "order": 40,
-      "nameKey": "LOC_SettingLoadTexturesFromFolderName",
-      "descriptionKey": "LOC_SettingLoadTexturesFromFolderDescription"
+      "nameKey": "LOC_SettingLoadVehicleVisualReplacementsName",
+      "descriptionKey": "LOC_SettingLoadVehicleVisualReplacementsDescription"
     },
     {
       "id": "FID_ShowPlayerNameOnShowroomLicencePlates",
@@ -118,8 +118,8 @@
       "LOC_SettingLoadBrandLogosFromModsDescription": "Load brand logos supplied by Workshop vehicle mods.",
       "LOC_SettingLoadBrandLogosFromTKAftermarketName": "TK Aftermarket logos",
       "LOC_SettingLoadBrandLogosFromTKAftermarketDescription": "Also read brand logos from Mods\\TKAftermarket\\brands when available.",
-      "LOC_SettingLoadTexturesFromFolderName": "Local texture replacements",
-      "LOC_SettingLoadTexturesFromFolderDescription": "Load local brand logos and scene or vehicle texture replacements.",
+      "LOC_SettingLoadVehicleVisualReplacementsName": "Vehicle visual replacements",
+      "LOC_SettingLoadVehicleVisualReplacementsDescription": "Load local brand logos, vehicle/interior textures and matching thumbnails.",
       "LOC_SettingShowPlayerNameOnShowroomLicencePlatesName": "Player name on showroom plates",
       "LOC_SettingShowPlayerNameOnShowroomLicencePlatesDescription": "Show the current player name on licence plates in Showroom and Auto Salon.",
       "LOC_SettingPreloadAllParkingSceneVehiclesName": "Preload parking vehicles",
@@ -138,8 +138,8 @@
       "LOC_SettingLoadBrandLogosFromModsDescription": "Загружать логотипы брендов из автомобильных модов Workshop.",
       "LOC_SettingLoadBrandLogosFromTKAftermarketName": "Логотипы TK Aftermarket",
       "LOC_SettingLoadBrandLogosFromTKAftermarketDescription": "Дополнительно читать логотипы из Mods\\TKAftermarket\\brands, если каталог существует.",
-      "LOC_SettingLoadTexturesFromFolderName": "Локальные замены текстур",
-      "LOC_SettingLoadTexturesFromFolderDescription": "Загружать локальные логотипы и замены текстур сцен и автомобилей.",
+      "LOC_SettingLoadVehicleVisualReplacementsName": "Визуальные замены автомобилей",
+      "LOC_SettingLoadVehicleVisualReplacementsDescription": "Загружать локальные логотипы брендов, текстуры автомобилей и интерьеров, а также соответствующие миниатюры.",
       "LOC_SettingShowPlayerNameOnShowroomLicencePlatesName": "Имя игрока на номерах автосалона",
       "LOC_SettingShowPlayerNameOnShowroomLicencePlatesDescription": "Показывать имя текущего игрока на номерах в Showroom и Auto Salon.",
       "LOC_SettingPreloadAllParkingSceneVehiclesName": "Предзагрузка машин парковки",

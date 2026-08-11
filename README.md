@@ -36,9 +36,9 @@ listed switch currently uses `restartGame` apply mode.
 | In-game setting | Config flag | Default | Detailed behavior |
 |---|---|---:|---|
 | **Authentic vehicle names** | `useAuthenticCarNames` | `true` | After game car data is ready, applies configured real-world vehicle names, brand names and version/configuration suffixes from `AuthenticCarNames.cfg`. Unmatched entries remain unchanged and invalid or missing data is reported without blocking startup. |
-| **Workshop brand logos** | `loadBrandLogosFromMods` | `true` | Discovers supported brand-logo PNG files supplied by installed Workshop vehicle mods and adds or replaces matching brand images in the game's logo data. |
+| **Workshop brand logos** | `loadBrandLogosFromMods` | `true` | Discovers supported brand-logo PNG files supplied by installed Workshop vehicle mods and adds missing matching brand images to the game's logo data. Existing logos are left unchanged. |
 | **TK Aftermarket logos** | `loadBrandLogosFromTKAftermarket` | `false` | When Workshop logo loading is enabled, additionally reads `Mods\TKAftermarket\brands`. The integration is explicit opt-in; a missing directory is a no-op and does not interfere with normal Workshop logos. |
-| **Local texture replacements** | `loadTexturesFromFolder` | `true` | Loads local brand logos from `BrandLogos`, vehicle/interior replacements from `TextureReplacements\CarLoader`, and scene-specific replacements from `TextureReplacements\Scenes\<scene>`. Only matching mapped textures are replaced; missing files are ignored. |
+| **Vehicle visual replacements** | `loadVehicleVisualReplacements` | `true` | Loads local brand logos from `BrandLogos`, vehicle/interior textures from `TextureReplacements\CarLoader`, and matching thumbnails. Only mapped vehicle assets are replaced; missing files are ignored. |
 | **Player name on showroom plates** | `showPlayerNameOnShowroomLicencePlates` | `true` | Writes the current profile/player name to licence plates in Showroom and Auto Salon only. Car Editor and ordinary owned vehicles are not modified. |
 
 ### Locations and garage
@@ -68,7 +68,7 @@ Current templates and UI manifest:
 - `configs/CMS21ImmersionPlus.ui-settings.json` — in-game settings groups, labels and metadata;
 - `configs/AuthenticCarNames.cfg` — vehicle, brand and version-name mappings;
 - `resources/BrandLogos` — local brand-logo replacements;
-- `resources/TextureReplacements` — vehicle, interior and scene texture replacements.
+- `resources/TextureReplacements` — vehicle and interior texture replacements.
 
 At runtime they are installed under:
 
@@ -87,8 +87,8 @@ CMS21 Immersion+ retains the following feature concepts from QoLmod by **Meitzi*
 
 - removal of the dyno menu blur, split from the former streamlined dyno feature:
   `removeDynoMenuBlur`;
-- authentic vehicle names, Workshop logos and local texture replacement:
-  `useAuthenticCarNames`, `loadBrandLogosFromMods`, `loadTexturesFromFolder`;
+- authentic vehicle names, Workshop logos and local vehicle visual replacement:
+  `useAuthenticCarNames`, `loadBrandLogosFromMods`, `loadVehicleVisualReplacements`;
 - parking-scene vehicle preloading and showroom licence plates:
   `preloadAllParkingSceneVehicles`, `showPlayerNameOnShowroomLicencePlates`.
 

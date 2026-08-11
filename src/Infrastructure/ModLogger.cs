@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using MelonLoader;
 using UnityEngine;
 
 namespace Cms21ImmersionPlus
 {
-    /// <summary>Central console logging and optional Unity Player.log interception.</summary>
+    /// <summary>Central logging with file-only debug output and optional Unity Player.log interception.</summary>
     public static class ModLogger
     {
         private static readonly Action<string, string, LogType> UnityLogHandler =
@@ -38,9 +39,28 @@ namespace Cms21ImmersionPlus
             "[Inventory] -> GetBaseItem() Not found"
         };
 
+        private static readonly object DebugLogSync = new object();
         private static string lastUnityApplicationLogMessage = string.Empty;
         private static bool unityLogForwardingEnabled;
         private static bool unityLogListenerRegistered;
+        private static StreamWriter debugLogWriter;
+
+        public static void InitializeDebugFile()
+        {
+            lock (DebugLogSync) {
+                CloseDebugFile();
+                try {
+                    string path = Path.GetFullPath(GlobalConfig.debugLogFile);
+                    string directory = Path.GetDirectoryName(path);
+                    if (!string.IsNullOrEmpty(directory))
+                        Directory.CreateDirectory(directory);
+                    debugLogWriter = new StreamWriter(path, false);
+                    debugLogWriter.AutoFlush = true;
+                } catch {
+                    debugLogWriter = null;
+                }
+            }
+        }
 
         public static void ConfigureUnityLogForwarding(bool enabled)
         {
@@ -62,18 +82,20 @@ namespace Cms21ImmersionPlus
         public static void Shutdown()
         {
             unityLogForwardingEnabled = false;
-            if (!unityLogListenerRegistered)
-                return;
-
-            try {
-                Application.remove_logMessageReceived(UnityLogHandler);
-            } catch (Exception exception) {
-                Log("[Shutdown] Unity log listener was not removed." +
-                    Environment.NewLine + exception, Types.LoggingLevels.Warning);
-            } finally {
-                unityLogListenerRegistered = false;
-                lastUnityApplicationLogMessage = string.Empty;
+            if (unityLogListenerRegistered) {
+                try {
+                    Application.remove_logMessageReceived(UnityLogHandler);
+                } catch (Exception exception) {
+                    Log("[Shutdown] Unity log listener was not removed." +
+                        Environment.NewLine + exception, Types.LoggingLevels.Warning);
+                } finally {
+                    unityLogListenerRegistered = false;
+                    lastUnityApplicationLogMessage = string.Empty;
+                }
             }
+
+            lock (DebugLogSync)
+                CloseDebugFile();
         }
 
         public static void Log(string msg = "",
@@ -82,8 +104,10 @@ namespace Cms21ImmersionPlus
             [CallerLineNumber] int lineNumber = 0)
         {
             msg = (msg ?? string.Empty).Replace("\r\n", "\n");
-            if (loggingLevel == Types.LoggingLevels.Debug)
+            if (loggingLevel == Types.LoggingLevels.Debug) {
+                WriteDebug(msg, callerName, lineNumber);
                 return;
+            }
 
 #if NET6_0_OR_GREATER
             MelonLogger.Instance loggerInstance = Melon<Cms21ImmersionPlus.Main>.Logger;
@@ -118,6 +142,32 @@ namespace Cms21ImmersionPlus
                     MelonLogger.Error(string.Format("[{0}():{1}] {2}",
                         callerName, lineNumber, msg));
                     break;
+            }
+        }
+
+        private static void WriteDebug(string msg, string callerName, int lineNumber)
+        {
+            lock (DebugLogSync) {
+                if (debugLogWriter == null)
+                    return;
+                try {
+                    debugLogWriter.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss.fff") +
+                        "] [" + callerName + ":" + lineNumber + "] " + msg);
+                } catch {
+                    CloseDebugFile();
+                }
+            }
+        }
+
+        private static void CloseDebugFile()
+        {
+            if (debugLogWriter == null)
+                return;
+            try {
+                debugLogWriter.Dispose();
+            } catch {
+            } finally {
+                debugLogWriter = null;
             }
         }
 
@@ -156,8 +206,8 @@ namespace Cms21ImmersionPlus
                     return;
             }
 
-            MelonDebug.Msg("Player.log[" + type + ":" + firstStackLine + "] " +
-                condition);
+            Log("Player.log[" + type + ":" + firstStackLine + "] " +
+                condition, Types.LoggingLevels.Debug);
         }
 
         private static void RemoveKnownWrapper(List<string> stackLines, string prefix)

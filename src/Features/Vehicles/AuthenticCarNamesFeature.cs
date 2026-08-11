@@ -23,6 +23,10 @@ namespace Cms21ImmersionPlus
             if (GlobalState.GameManager == null ||
                 GlobalState.GameManager.CarBundleLoader == null)
                 return false;
+
+            GameInventory inventory = Singleton<GameInventory>.Instance;
+            if (inventory == null)
+                return false;
             if (!File.Exists(GlobalConfig.cfgAuthCar)) {
                 ModLogger.Log("[AuthenticCarNames] Config file not found: " +
                     GlobalConfig.cfgAuthCar, Types.LoggingLevels.Warning);
@@ -106,10 +110,6 @@ namespace Cms21ImmersionPlus
                     }
 
                 }
-
-                GameInventory inventory = Singleton<GameInventory>.Instance;
-                if (inventory == null)
-                    return false;
 
                 UpdateBodyPartBrands(inventory, changedBrands);
                 inventory.UpdateLocalizations();

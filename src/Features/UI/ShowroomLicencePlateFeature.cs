@@ -41,17 +41,18 @@ namespace Cms21ImmersionPlus
         [HarmonyPrefix]
         public static void LoadAndPrepareModelPrefix(CarLoader __instance)
         {
-            if (IsEnabled && __instance != null)
-                MelonCoroutines.Start(ApplyAfterLoad(__instance));
-        }
+            if (!IsEnabled || __instance == null)
+                return;
 
-        private static IEnumerator ApplyAfterLoad(CarLoader loader)
-        {
-            const int maximumWaitFrames = 600;
             string scene = UnityEngine.SceneManagement.SceneManager
                 .GetActiveScene().name;
-            if (!IsSupportedScene(scene))
-                yield break;
+            if (IsSupportedScene(scene))
+                MelonCoroutines.Start(ApplyAfterLoad(__instance, scene));
+        }
+
+        private static IEnumerator ApplyAfterLoad(CarLoader loader, string scene)
+        {
+            const int maximumWaitFrames = 600;
 
             int waitedFrames = 0;
             while (loader != null && (!loader.done || !loader.modelLoaded) &&
