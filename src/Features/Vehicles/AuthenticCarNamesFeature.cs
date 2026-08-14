@@ -16,6 +16,60 @@ namespace Cms21ImmersionPlus
     /// <summary>Applies configured real-world car, brand, and version names once game data is ready.</summary>
     public static class AuthenticCarNamesFeature
     {
+        private static readonly Dictionary<string, string> InteriorBrandReferenceCars =
+            new Dictionary<string, string>(StringComparer.Ordinal) {
+                { "atom", "car_atom330" },
+                { "bolt", "car_boltatlanta" },
+                { "bolthorn", "car_bolthorngrandmojave" },
+                { "castor", "car_castoravalanche" },
+                { "chieftain", "car_chieftainbandit" },
+                { "dc", "car_dctyphoon" },
+                { "echos", "car_echosimperator" },
+                { "edgewood", "car_edgewoodwildcat" },
+                { "emden", "car_emdenjager" },
+                { "fmw", "car_fmwpanther" },
+                { "griffin", "car_griffintyro" },
+                { "hinata", "car_hinatakagurasx" },
+                { "katagiri", "car_katagirikatsumoto" },
+                { "luxor", "car_luxorbowen" },
+                { "mayen", "car_mayenm3" },
+                { "mioveni", "car_mioveniurs" },
+                { "olsen", "car_olsengrandclub" },
+                { "ribbsan", "car_ribbsanstarline" },
+                { "rino", "car_rinopiccolo" },
+                { "royale", "car_royalecrown" },
+                { "sakura", "car_sakurasupa" },
+                { "salem", "car_salemgw500" },
+                { "sceo", "car_sceolx550" },
+                { "sixon", "car_sixoncebulion" },
+                { "tempest", "car_tempestmagnum" },
+                { "vallsen", "car_vallsen2040" },
+                { "zephyr", "car_zephyrlseries" }
+            };
+
+        private static readonly Dictionary<string, string> InteriorPartReferenceCars =
+            new Dictionary<string, string>(StringComparer.Ordinal) {
+                { "bench_custom", "car_delraycustom" },
+                { "seat_highroad", "car_delrayhighroad" },
+                { "bench_highroad", "car_delrayhighroad" },
+                { "steering_wheel_winchester", "car_delraywinchester" },
+                { "bench_winchester", "car_delraywinchester" }
+            };
+
+        private static readonly Dictionary<string, string> RimsBrandReferenceCars =
+            new Dictionary<string, string>(StringComparer.Ordinal) {
+                { "bolt", "car_boltatlanta" },
+                { "castor", "car_castoravalanche" },
+                { "chieftain", "car_chieftainbandit" },
+                { "dc", "car_dctyphoon" },
+                { "delray", "car_delrayhighroad" },
+                { "edgewood", "car_edgewoodwildcat" },
+                { "emden", "car_emdenlotz" },
+                { "luxor", "car_luxorbowen" },
+                { "salem", "car_salemgw500" },
+                { "zephyr", "car_zephyrlseries" }
+            };
+
         public static bool Apply()
         {
             if (Main.SettingsEntry == null || !Main.SettingsEntry.Value.useAuthenticCarNames)
@@ -112,6 +166,8 @@ namespace Cms21ImmersionPlus
                 }
 
                 UpdateBodyPartBrands(inventory, changedBrands);
+                UpdateInteriorPartBrands(inventory, changedBrands);
+                UpdateRimsPartBrands(inventory, changedBrands);
                 inventory.UpdateLocalizations();
                 ModLogger.Log("[AuthenticCarNames] Loaded " + entries.Length +
                     " entries; matched=" + matchedCars + ", renamedCars=" +
@@ -161,6 +217,75 @@ namespace Cms21ImmersionPlus
                 string brand;
                 if (changedBrands.TryGetValue(item.CarID, out brand))
                     item.Brand = brand;
+            }
+        }
+
+        private static void UpdateInteriorPartBrands(GameInventory inventory,
+            Dictionary<string, string> changedBrands)
+        {
+            Il2CppSystem.Collections.Generic.List<PartProperty> items =
+                inventory.GetItems(ShopType.Interior);
+            if (items == null)
+                return;
+
+            Dictionary<string, string> brandTargets =
+                new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (KeyValuePair<string, string> mapping in
+                InteriorBrandReferenceCars) {
+                string target;
+                if (changedBrands.TryGetValue(mapping.Value, out target))
+                    brandTargets[mapping.Key] = target;
+            }
+
+            foreach (PartProperty item in items) {
+                if (item == null)
+                    continue;
+
+                string target;
+                if (brandTargets.TryGetValue(item.Brand ?? string.Empty, out target)) {
+                    item.Brand = target;
+                    continue;
+                }
+
+                if (!string.Equals(item.Brand, "delray", StringComparison.Ordinal))
+                    continue;
+
+                string id = item.ID ?? string.Empty;
+                foreach (KeyValuePair<string, string> mapping in
+                    InteriorPartReferenceCars) {
+                    if (!id.StartsWith(mapping.Key, StringComparison.Ordinal))
+                        continue;
+                    if (changedBrands.TryGetValue(mapping.Value, out target))
+                        item.Brand = target;
+                    break;
+                }
+            }
+        }
+
+        private static void UpdateRimsPartBrands(GameInventory inventory,
+            Dictionary<string, string> changedBrands)
+        {
+            Il2CppSystem.Collections.Generic.List<PartProperty> items =
+                inventory.GetItems(ShopType.Rims);
+            if (items == null)
+                return;
+
+            Dictionary<string, string> brandTargets =
+                new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (KeyValuePair<string, string> mapping in
+                RimsBrandReferenceCars) {
+                string target;
+                if (changedBrands.TryGetValue(mapping.Value, out target))
+                    brandTargets[mapping.Key] = target;
+            }
+
+            foreach (PartProperty item in items) {
+                if (item == null)
+                    continue;
+
+                string target;
+                if (brandTargets.TryGetValue(item.Brand ?? string.Empty, out target))
+                    item.Brand = target;
             }
         }
 

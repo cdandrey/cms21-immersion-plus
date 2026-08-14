@@ -242,10 +242,9 @@ namespace Cms21ImmersionPlus
 
         private static void LoadBrandLogosFromFolder()
         {
-            string directory = Path.GetFullPath(GlobalConfig.directoryBrandLogos);
+            string directory = Path.GetFullPath(GlobalConfig.directoryCarBrand);
             if (!Directory.Exists(directory)) {
-                ModLogger.Log("[Textures] Brand-logo directory is absent: " +
-                    directory, Types.LoggingLevels.Debug);
+                ModLogger.Debug("[Textures] Brand-logo directory is absent: " + directory);
                 return;
             }
 
@@ -322,6 +321,9 @@ namespace Cms21ImmersionPlus
         private static string GetRuntimeTextureName(string file)
         {
             string projectName = Path.GetFileNameWithoutExtension(file);
+            if (projectName.StartsWith("CB_", StringComparison.OrdinalIgnoreCase))
+                projectName = projectName.Substring(3);
+
             string runtimeName;
             return RuntimeTextureNames.TryGetValue(projectName, out runtimeName)
                 ? runtimeName

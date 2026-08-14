@@ -185,8 +185,8 @@ namespace Cms21ImmersionPlus
             int buttonCount = Math.Min(placeCount, Math.Min(ParkingPlaceLimit,
                 parkingWindow.parkingButtons.Length));
 
-            ModLogger.Log("[ParkingPreload] Loading all vehicles in alley " +
-                (parkingWindow.parkingLevel + 1) + ".", Types.LoggingLevels.Debug);
+            ModLogger.Debug("[ParkingPreload] Loading all vehicles in alley " +
+                (parkingWindow.parkingLevel + 1) + ".");
 
             for (int i = 0; i < placeCount; i++) {
                 if (!IsWorkerValid(generation))

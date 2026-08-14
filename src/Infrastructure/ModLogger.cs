@@ -1,15 +1,18 @@
 using System;
+#if CMS21_DIAGNOSTICS
 using System.Collections.Generic;
 using System.IO;
+#endif
 using System.Runtime.CompilerServices;
 using MelonLoader;
 using UnityEngine;
 
 namespace Cms21ImmersionPlus
 {
-    /// <summary>Central logging with file-only debug output and optional Unity Player.log interception.</summary>
+    /// <summary>Central runtime logging with compile-time optional file diagnostics.</summary>
     public static class ModLogger
     {
+#if CMS21_DIAGNOSTICS
         private static readonly Action<string, string, LogType> UnityLogHandler =
             new Action<string, string, LogType>(HandleUnityLog);
 
@@ -44,43 +47,22 @@ namespace Cms21ImmersionPlus
         private static bool unityLogForwardingEnabled;
         private static bool unityLogListenerRegistered;
         private static StreamWriter debugLogWriter;
+#endif
 
-        public static void InitializeDebugFile()
+        [System.Diagnostics.Conditional("CMS21_DIAGNOSTICS")]
+        public static void InitializeDiagnostics()
         {
-            lock (DebugLogSync) {
-                CloseDebugFile();
-                try {
-                    string path = Path.GetFullPath(GlobalConfig.debugLogFile);
-                    string directory = Path.GetDirectoryName(path);
-                    if (!string.IsNullOrEmpty(directory))
-                        Directory.CreateDirectory(directory);
-                    debugLogWriter = new StreamWriter(path, false);
-                    debugLogWriter.AutoFlush = true;
-                } catch {
-                    debugLogWriter = null;
-                }
-            }
+#if CMS21_DIAGNOSTICS
+            InitializeDebugFile();
+            ConfigureUnityLogForwarding(
+                Array.IndexOf(Environment.GetCommandLineArgs(), "--melonloader.debug") >= 0);
+#endif
         }
 
-        public static void ConfigureUnityLogForwarding(bool enabled)
+        [System.Diagnostics.Conditional("CMS21_DIAGNOSTICS")]
+        public static void ShutdownDiagnostics()
         {
-            unityLogForwardingEnabled = enabled;
-            try {
-                if (enabled && !unityLogListenerRegistered) {
-                    Application.add_logMessageReceived(UnityLogHandler);
-                    unityLogListenerRegistered = true;
-                } else if (!enabled && unityLogListenerRegistered) {
-                    Application.remove_logMessageReceived(UnityLogHandler);
-                    unityLogListenerRegistered = false;
-                }
-            } catch (Exception exception) {
-                Log("[Startup] Unity log listener state could not be changed." +
-                    Environment.NewLine + exception, Types.LoggingLevels.Warning);
-            }
-        }
-
-        public static void Shutdown()
-        {
+#if CMS21_DIAGNOSTICS
             unityLogForwardingEnabled = false;
             if (unityLogListenerRegistered) {
                 try {
@@ -96,18 +78,25 @@ namespace Cms21ImmersionPlus
 
             lock (DebugLogSync)
                 CloseDebugFile();
+#endif
         }
 
-        public static void Log(string msg = "",
-            Types.LoggingLevels loggingLevel = Types.LoggingLevels.Debug,
+        [System.Diagnostics.Conditional("CMS21_DIAGNOSTICS")]
+        public static void Debug(string msg = "",
+            [CallerMemberName] string callerName = "",
+            [CallerLineNumber] int lineNumber = 0)
+        {
+#if CMS21_DIAGNOSTICS
+            WriteDebug((msg ?? string.Empty).Replace("\r\n", "\n"), callerName, lineNumber);
+#endif
+        }
+
+        public static void Log(string msg,
+            Types.LoggingLevels loggingLevel,
             [CallerMemberName] string callerName = "",
             [CallerLineNumber] int lineNumber = 0)
         {
             msg = (msg ?? string.Empty).Replace("\r\n", "\n");
-            if (loggingLevel == Types.LoggingLevels.Debug) {
-                WriteDebug(msg, callerName, lineNumber);
-                return;
-            }
 
 #if NET6_0_OR_GREATER
             MelonLogger.Instance loggerInstance = Melon<Cms21ImmersionPlus.Main>.Logger;
@@ -131,7 +120,7 @@ namespace Cms21ImmersionPlus
                     break;
 #endif
                 case Types.LoggingLevels.PlayerLog:
-                    Debug.Log(string.Format("CMS21ImmersionPlus[{0}():{1}] {2}",
+                    UnityEngine.Debug.Log(string.Format("CMS21ImmersionPlus[{0}():{1}] {2}",
                         callerName, lineNumber, msg));
                     break;
                 case Types.LoggingLevels.Warning:
@@ -142,6 +131,41 @@ namespace Cms21ImmersionPlus
                     MelonLogger.Error(string.Format("[{0}():{1}] {2}",
                         callerName, lineNumber, msg));
                     break;
+            }
+        }
+
+#if CMS21_DIAGNOSTICS
+        private static void InitializeDebugFile()
+        {
+            lock (DebugLogSync) {
+                CloseDebugFile();
+                try {
+                    string path = Path.GetFullPath(GlobalConfig.debugLogFile);
+                    string directory = Path.GetDirectoryName(path);
+                    if (!string.IsNullOrEmpty(directory))
+                        Directory.CreateDirectory(directory);
+                    debugLogWriter = new StreamWriter(path, false);
+                    debugLogWriter.AutoFlush = true;
+                } catch {
+                    debugLogWriter = null;
+                }
+            }
+        }
+
+        private static void ConfigureUnityLogForwarding(bool enabled)
+        {
+            unityLogForwardingEnabled = enabled;
+            try {
+                if (enabled && !unityLogListenerRegistered) {
+                    Application.add_logMessageReceived(UnityLogHandler);
+                    unityLogListenerRegistered = true;
+                } else if (!enabled && unityLogListenerRegistered) {
+                    Application.remove_logMessageReceived(UnityLogHandler);
+                    unityLogListenerRegistered = false;
+                }
+            } catch (Exception exception) {
+                Log("[Startup] Unity log listener state could not be changed." +
+                    Environment.NewLine + exception, Types.LoggingLevels.Warning);
             }
         }
 
@@ -206,8 +230,7 @@ namespace Cms21ImmersionPlus
                     return;
             }
 
-            Log("Player.log[" + type + ":" + firstStackLine + "] " +
-                condition, Types.LoggingLevels.Debug);
+            Debug("Player.log[" + type + ":" + firstStackLine + "] " + condition);
         }
 
         private static void RemoveKnownWrapper(List<string> stackLines, string prefix)
@@ -215,5 +238,6 @@ namespace Cms21ImmersionPlus
             if (stackLines.Count > 0 && stackLines[0].StartsWith(prefix))
                 stackLines.RemoveAt(0);
         }
+#endif
     }
 }

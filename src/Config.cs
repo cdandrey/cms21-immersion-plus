@@ -18,6 +18,10 @@ namespace Cms21ImmersionPlus
         public bool loadBrandLogosFromTKAftermarket = false;
         [Tomlet.Attributes.TomlInlineComment("Load local visual replacements for vehicle brands, models and related thumbnails")]
         public bool loadVehicleVisualReplacements = true;
+        [Tomlet.Attributes.TomlInlineComment("Replace shop-card branding with a unified style based on selected real-world brands")]
+        public bool rebrandShops = true;
+        [Tomlet.Attributes.TomlInlineComment("Replace fictional aftermarket part brands with real-world component manufacturers")]
+        public bool rebrandParts = true;
         [Tomlet.Attributes.TomlInlineComment("Keep all ten vehicles visible in the current parking alley")]
         public bool preloadAllParkingSceneVehicles = true;
         [Tomlet.Attributes.TomlInlineComment("Show the current player name on showroom licence plates")]
@@ -28,10 +32,14 @@ namespace Cms21ImmersionPlus
     {
         public static readonly string cfgFile = @"Mods\CMS21ImmersionPlus\CMS21ImmersionPlus.cfg";
         public static readonly string cfgAuthCar = @"Mods\CMS21ImmersionPlus\AuthenticCarNames.cfg";
-        public static readonly string directoryBrandLogos = @"Mods\CMS21ImmersionPlus\BrandLogos\";
+        public static readonly string directoryCarBrand = @"Mods\CMS21ImmersionPlus\CarBrand\";
         public static readonly string directoryTKAftermarketBrands = @"Mods\TKAftermarket\brands\";
         public static readonly string directoryTextureReplacements = @"Mods\CMS21ImmersionPlus\TextureReplacements\";
+        public static readonly string directoryShopBrand = @"Mods\CMS21ImmersionPlus\ShopBrand\";
+        public static readonly string directoryPartBrand = @"Mods\CMS21ImmersionPlus\PartBrand\";
+#if CMS21_DIAGNOSTICS
         public static readonly string debugLogFile = @"Mods\CMS21ImmersionPlus\CMS21ImmersionPlus.debug.log";
+#endif
     }
 
     public static class GlobalState
@@ -42,7 +50,7 @@ namespace Cms21ImmersionPlus
 
     public static class Types
     {
-        public enum LoggingLevels { Normal, NormalClean, Debug, PlayerLog, Warning, Error }
+        public enum LoggingLevels { Normal, NormalClean, PlayerLog, Warning, Error }
 
         public sealed class AuthenticCarNamesConfig
         {

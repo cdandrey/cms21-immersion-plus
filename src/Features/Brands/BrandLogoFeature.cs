@@ -120,9 +120,8 @@ namespace Cms21ImmersionPlus
             string directory = Path.GetFullPath(
                 GlobalConfig.directoryTKAftermarketBrands);
             if (!Directory.Exists(directory)) {
-                ModLogger.Log("[BrandLogos] TK Aftermarket integration is enabled, " +
-                    "but its brands directory is absent. Integration was skipped.",
-                    Types.LoggingLevels.Debug);
+                ModLogger.Debug("[BrandLogos] TK Aftermarket integration is enabled, " +
+                    "but its brands directory is absent. Integration was skipped.");
                 return;
             }
 
@@ -206,9 +205,9 @@ namespace Cms21ImmersionPlus
                 });
                 installed.Add(candidate.Name);
                 added++;
-                ModLogger.Log("[BrandLogos] Added '" +
+                ModLogger.Debug("[BrandLogos] Added '" +
                     candidate.Name.ToUpperInvariant() + "' from " +
-                    candidate.Source + ".", Types.LoggingLevels.Debug);
+                    candidate.Source + ".");
             }
 
             if (added > 0)

@@ -3,7 +3,7 @@ param(
     [ValidateSet("Build", "Rebuild", "Clean")]
     [string]$Target = "Build",
 
-    [ValidateSet("Debug", "Release")]
+    [ValidateSet("Debug", "Release", "Diagnostics")]
     [string]$Configuration = "Debug"
 )
 

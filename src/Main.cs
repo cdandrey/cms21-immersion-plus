@@ -37,12 +37,13 @@ namespace Cms21ImmersionPlus
         private static bool authenticCarNamesInitialized;
         private static bool brandLogosInitialized;
         private static bool vehicleVisualReplacementsInitialized;
+        private static bool partBrandingInitialized;
 
         public static MelonPreferences_Entry<Settings> SettingsEntry;
 
         public override void OnLateInitializeMelon()
         {
-            ModLogger.InitializeDebugFile();
+            ModLogger.InitializeDiagnostics();
             string startMessage = BuildInfo.Name + " v" + BuildInfo.Version +
                 " initializing; Unity " + Application.unityVersion + ", game " +
                 GameSettings.BuildVersion + ".";
@@ -51,9 +52,7 @@ namespace Cms21ImmersionPlus
             GlobalState.GameManager = Singleton<GameManager>.Instance;
             DetectPlatform();
             ShowroomLicencePlateFeature.RefreshCurrentUsername();
-            bool melonDebug = Environment.GetCommandLineArgs().Contains("--melonloader.debug");
             LoadSettings();
-            ModLogger.ConfigureUnityLogForwarding(melonDebug);
             ApplyHarmonyPatches();
             initialized = true;
         }
@@ -63,7 +62,7 @@ namespace Cms21ImmersionPlus
             if (!initialized)
                 return;
             ModLogger.Log(BuildInfo.ShortName + " stopped.", Types.LoggingLevels.Normal);
-            ModLogger.Shutdown();
+            ModLogger.ShutdownDiagnostics();
         }
 
         public override void OnSceneWasUnloaded(int buildIndex, string sceneName)
@@ -125,6 +124,8 @@ namespace Cms21ImmersionPlus
                 brandLogosInitialized = TryInitializeFeature("BrandLogos", BrandLogoFeature.Apply);
             if (!vehicleVisualReplacementsInitialized)
                 vehicleVisualReplacementsInitialized = TryInitializeFeature("VehicleVisualReplacements", VehicleVisualReplacementFeature.OnGameDataReady);
+            if (!partBrandingInitialized)
+                partBrandingInitialized = TryInitializeFeature("PartBranding", PartBrandingFeature.Apply);
         }
 
         private static bool TryInitializeFeature(string name, Func<bool> initializer)
@@ -139,7 +140,7 @@ namespace Cms21ImmersionPlus
 
         private static bool AreGameDataFeaturesInitialized()
         {
-            return authenticCarNamesInitialized && brandLogosInitialized && vehicleVisualReplacementsInitialized;
+            return authenticCarNamesInitialized && brandLogosInitialized && vehicleVisualReplacementsInitialized && partBrandingInitialized;
         }
 
         private void ApplyHarmonyPatches()
