@@ -30,20 +30,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Diagnostics|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Diagnostics\</OutputPath>
-    <DefineConstants>TRACE;CMS21_DIAGNOSTICS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\Config.cs" />
     <Compile Include="src\Features\Brands\BrandLogoFeature.cs" />
     <Compile Include="src\Features\Parking\ParkingSceneVehiclePreloadFeature.cs" />
     <Compile Include="src\Features\Parts\PartBrandingFeature.cs" />
     <Compile Include="src\Features\Shops\ShopRebrandingFeature.cs" />
+    <Compile Include="src\Features\Textures\GarageAdvertisingFeature.cs" />
     <Compile Include="src\Features\Textures\VehicleVisualReplacementFeature.cs" />
     <Compile Include="src\Features\UI\ShowroomLicencePlateFeature.cs" />
     <Compile Include="src\Features\Vehicles\AuthenticCarNamesFeature.cs" />

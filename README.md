@@ -25,29 +25,24 @@ All switches below are stored under `[CMS21ImmersionPlus.Settings]` in
 `CMS21ImmersionPlus.cfg`. Displayed names are taken from the in-game settings manifest; every
 listed switch currently uses `restartGame` apply mode.
 
-### Interface and state
+### Authenticity
 
 | In-game setting | Config flag | Default | Detailed behavior |
 |---|---|---:|---|
-| **Remove dyno menu blur** | `removeDynoMenuBlur` | `true` | Disables the dyno window's menu blur without changing confirmation behavior. Automatic acceptance of the redundant dyno-start confirmation is controlled separately by CMS21 UI+. |
+| **Authentic vehicles** | `useAuthenticCarNames` | `true` | Applies configured real-world vehicle and brand names from `AuthenticCarNames.cfg` and enables the matching local vehicle visual replacements: brand logos, vehicle/interior textures and thumbnails. Unmatched or missing assets are left unchanged. |
+| **Authentic auto-part brands** | `rebrandParts` | `true` | Replaces fictional aftermarket brands on part cards with real-world component manufacturers while preserving vehicle-specific OEM brands. |
+| **Authentic auto-shop brands** | `rebrandShops` | `true` | Replaces shop-card avatars with the configured real-world automotive brands. |
+| **Authentic banners** | `loadGarageAdvertising` | `true` | Loads garage banners, calendars and related advertising replacements from `TextureReplacements\Environment\GarageAds`. Missing files are ignored. |
+| **Vehicle brand logos from Workshop mods** | `loadBrandLogosFromMods` | `true` | Discovers supported brand-logo PNG files supplied by installed Workshop vehicle mods and adds missing matching brand images to the game's logo data. Existing logos are left unchanged. |
+| **TK Aftermarket logos** | `loadBrandLogosFromTKAftermarket` | `false` | When Workshop logo loading is enabled, additionally reads `Mods\TKAftermarket\brands`. A missing directory is a no-op. |
 
-### Vehicles, brands and textures
-
-| In-game setting | Config flag | Default | Detailed behavior |
-|---|---|---:|---|
-| **Authentic vehicle names** | `useAuthenticCarNames` | `true` | After game car data is ready, applies configured real-world vehicle names, brand names and version/configuration suffixes from `AuthenticCarNames.cfg`, including matching body/body-tuning and vehicle-specific interior-part brands. Unmatched entries remain unchanged and invalid or missing data is reported without blocking startup. |
-| **Workshop brand logos** | `loadBrandLogosFromMods` | `true` | Discovers supported brand-logo PNG files supplied by installed Workshop vehicle mods and adds missing matching brand images to the game's logo data. Existing logos are left unchanged. |
-| **TK Aftermarket logos** | `loadBrandLogosFromTKAftermarket` | `false` | When Workshop logo loading is enabled, additionally reads `Mods\TKAftermarket\brands`. The integration is explicit opt-in; a missing directory is a no-op and does not interfere with normal Workshop logos. |
-| **Vehicle visual replacements** | `loadVehicleVisualReplacements` | `true` | Loads local brand logos from `CarBrand`, vehicle/interior textures from `TextureReplacements\CarLoader`, and matching thumbnails. Only mapped vehicle assets are replaced; missing files are ignored. |
-| **Part branding** | `rebrandParts` | `true` | Replaces fictional aftermarket brands on part cards with real-world component manufacturers by part type: Brembo for brakes; Bilstein/Eibach/Lemförder/SKF/GKN for suspension; NGK/Gates/Bosch/VARTA/MANN-FILTER/Garrett/MAHLE/Dorman for engine and electronics; SACHS/ZF/TREMEC for driveline and configurable gearboxes; MagnaFlow/Borla/K&N/Edelbrock/COMP Cams/Wiseco for exhaust and tuning; RECARO/MOMO for generic interior parts; Continental/Pirelli/BFGoodrich for tires; BBS/OZ Racing/Enkei/RAYS for generic rims. Vehicle-specific OEM brands are preserved; previously unbranded addon parts are assigned Bosch for electrical roof accessories, Edelbrock for the hood scoop, and Dorman for the remaining generic accessories. |
-| **Player name on showroom plates** | `showPlayerNameOnShowroomLicencePlates` | `true` | Writes the current profile/player name to licence plates in Showroom and Auto Salon only. Car Editor and ordinary owned vehicles are not modified. |
-
-### Locations and garage
+### Effects and improvements
 
 | In-game setting | Config flag | Default | Detailed behavior |
 |---|---|---:|---|
-| **Preload parking vehicles** | `preloadAllParkingSceneVehicles` | `true` | In the parking scene, keeps all ten vehicles in the selected parking alley loaded and visible instead of only the currently focused subset. It does not add garage places, duplicate ownership or load parking cars into the garage. |
-| **Shop rebranding** | `rebrandShops` | `true` | Replaces shop-card avatars with real brand logos: Main → NAPA Auto Parts, Body → LKQ, Interior → MOMO, Tire → BFGoodrich, License Plate → LicensePlates.tv, Tuning → Summit Racing, Body Tuning → Maxton Design, Rims → BBS, Gearbox → TREMEC, Electronics → Bosch, Community → Steam Workshop and Addons → Nexus Mods. The Gearbox card uses a black background for the TREMEC logo; other cards stay transparent. Localized category descriptions remain unchanged. |
+| **Dyno window without blur** | `removeDynoMenuBlur` | `true` | Disables the dyno window's menu blur without changing confirmation behavior. |
+| **Player name on showroom plates** | `showPlayerNameOnShowroomLicencePlates` | `true` | Writes the current profile/player name to licence plates in Showroom and Auto Salon only. |
+| **Show all parking vehicles** | `preloadAllParkingSceneVehicles` | `true` | Keeps all ten vehicles in the selected parking alley loaded and visible instead of only the currently focused subset. |
 
 ## In-game mod settings
 
@@ -72,7 +67,7 @@ Current templates and UI manifest:
 - `resources/CarBrand` — local vehicle brand-logo replacements;
 - `resources/PartBrand` — real-world aftermarket brand logos used on part cards;
 - `resources/ShopBrand` — local shop-branding replacements;
-- `resources/TextureReplacements` — vehicle and interior texture replacements.
+- `resources/TextureReplacements` — vehicle, interior and garage advertising texture replacements.
 
 At runtime they are installed under:
 
@@ -92,11 +87,11 @@ CMS21 Immersion+ retains the following feature concepts from QoLmod by **Meitzi*
 - removal of the dyno menu blur, split from the former streamlined dyno feature:
   `removeDynoMenuBlur`;
 - authentic vehicle names, Workshop logos and local vehicle visual replacement:
-  `useAuthenticCarNames`, `loadBrandLogosFromMods`, `loadVehicleVisualReplacements`;
+  `useAuthenticCarNames`, `loadBrandLogosFromMods`;
 - parking-scene vehicle preloading and showroom licence plates:
   `preloadAllParkingSceneVehicles`, `showPlayerNameOnShowroomLicencePlates`.
 
-Shop rebranding and part branding are CMS21 Immersion+ additions.
+Garage advertising replacements, shop rebranding and part branding are CMS21 Immersion+ additions.
 
 TK Aftermarket logo loading is a CMS21 Immersion+ extension rather than a retained QoLmod
 feature.
@@ -160,12 +155,6 @@ From the repository root:
 
 ```powershell
 .\scripts\build.ps1 -Target Rebuild -Configuration Release
-```
-
-Diagnostic builds compile file-only debug logging and Unity log forwarding support:
-
-```powershell
-.\scripts\build.ps1 -Target Rebuild -Configuration Diagnostics
 ```
 
 Build, create the explicit install payload and install it:

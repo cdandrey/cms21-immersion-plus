@@ -10,14 +10,14 @@ namespace Cms21ImmersionPlus
     {
         [Tomlet.Attributes.TomlInlineComment("Remove the dyno menu blur")]
         public bool removeDynoMenuBlur = true;
-        [Tomlet.Attributes.TomlInlineComment("Rename vehicles and brands from AuthenticCarNames.cfg")]
+        [Tomlet.Attributes.TomlInlineComment("Use authentic vehicle names, brands and local visual replacements")]
         public bool useAuthenticCarNames = true;
         [Tomlet.Attributes.TomlInlineComment("Load brand logos supplied by workshop vehicle mods")]
         public bool loadBrandLogosFromMods = true;
         [Tomlet.Attributes.TomlInlineComment("Also import brand logos from Mods\\TKAftermarket\\brands when present")]
         public bool loadBrandLogosFromTKAftermarket = false;
-        [Tomlet.Attributes.TomlInlineComment("Load local visual replacements for vehicle brands, models and related thumbnails")]
-        public bool loadVehicleVisualReplacements = true;
+        [Tomlet.Attributes.TomlInlineComment("Load garage advertising, calendars and related environment replacements")]
+        public bool loadGarageAdvertising = true;
         [Tomlet.Attributes.TomlInlineComment("Replace shop-card branding with a unified style based on selected real-world brands")]
         public bool rebrandShops = true;
         [Tomlet.Attributes.TomlInlineComment("Replace fictional aftermarket part brands with real-world component manufacturers")]
@@ -37,9 +37,6 @@ namespace Cms21ImmersionPlus
         public static readonly string directoryTextureReplacements = @"Mods\CMS21ImmersionPlus\TextureReplacements\";
         public static readonly string directoryShopBrand = @"Mods\CMS21ImmersionPlus\ShopBrand\";
         public static readonly string directoryPartBrand = @"Mods\CMS21ImmersionPlus\PartBrand\";
-#if CMS21_DIAGNOSTICS
-        public static readonly string debugLogFile = @"Mods\CMS21ImmersionPlus\CMS21ImmersionPlus.debug.log";
-#endif
     }
 
     public static class GlobalState

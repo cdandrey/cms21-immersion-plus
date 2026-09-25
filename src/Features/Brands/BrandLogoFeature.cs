@@ -120,8 +120,6 @@ namespace Cms21ImmersionPlus
             string directory = Path.GetFullPath(
                 GlobalConfig.directoryTKAftermarketBrands);
             if (!Directory.Exists(directory)) {
-                ModLogger.Debug("[BrandLogos] TK Aftermarket integration is enabled, " +
-                    "but its brands directory is absent. Integration was skipped.");
                 return;
             }
 
@@ -205,9 +203,6 @@ namespace Cms21ImmersionPlus
                 });
                 installed.Add(candidate.Name);
                 added++;
-                ModLogger.Debug("[BrandLogos] Added '" +
-                    candidate.Name.ToUpperInvariant() + "' from " +
-                    candidate.Source + ".");
             }
 
             if (added > 0)

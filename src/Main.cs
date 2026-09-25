@@ -43,7 +43,6 @@ namespace Cms21ImmersionPlus
 
         public override void OnLateInitializeMelon()
         {
-            ModLogger.InitializeDiagnostics();
             string startMessage = BuildInfo.Name + " v" + BuildInfo.Version +
                 " initializing; Unity " + Application.unityVersion + ", game " +
                 GameSettings.BuildVersion + ".";
@@ -62,7 +61,13 @@ namespace Cms21ImmersionPlus
             if (!initialized)
                 return;
             ModLogger.Log(BuildInfo.ShortName + " stopped.", Types.LoggingLevels.Normal);
-            ModLogger.ShutdownDiagnostics();
+        }
+
+        public override void OnLateUpdate()
+        {
+            if (!initialized)
+                return;
+            GarageAdvertisingFeature.UpdateDiagnostics();
         }
 
         public override void OnSceneWasUnloaded(int buildIndex, string sceneName)
@@ -84,6 +89,7 @@ namespace Cms21ImmersionPlus
             if (!initialized || buildIndex == -1)
                 return;
             ParkingSceneVehiclePreloadFeature.OnSceneInitialized(sceneName);
+            GarageAdvertisingFeature.OnSceneInitialized(sceneName);
             if (sceneName == "garage")
                 GlobalState.IsGarageSceneActive = true;
             if (sceneName == "Menu") {

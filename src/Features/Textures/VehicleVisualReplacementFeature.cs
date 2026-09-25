@@ -51,7 +51,7 @@ namespace Cms21ImmersionPlus
         private static bool IsEnabled {
             get {
                 return Main.SettingsEntry != null &&
-                    Main.SettingsEntry.Value.loadVehicleVisualReplacements;
+                    Main.SettingsEntry.Value.useAuthenticCarNames;
             }
         }
 
@@ -244,7 +244,6 @@ namespace Cms21ImmersionPlus
         {
             string directory = Path.GetFullPath(GlobalConfig.directoryCarBrand);
             if (!Directory.Exists(directory)) {
-                ModLogger.Debug("[Textures] Brand-logo directory is absent: " + directory);
                 return;
             }
 

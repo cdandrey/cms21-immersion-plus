@@ -135,7 +135,23 @@ $releaseResourceFiles = @(
     "ShopBrand/SB_BFGoodrich.png",
     "ShopBrand/SB_TREMEC.png",
     "TextureReplacements/CarLoader/CallopeInterior.png",
-    "TextureReplacements/CarLoader/LavetinoInteriorDiffuse.png"
+    "TextureReplacements/CarLoader/LavetinoInteriorDiffuse.png",
+    "TextureReplacements/Environment/GarageAds/GA_EngineRoom_Bosch_ZF.png",
+    "TextureReplacements/Environment/GarageAds/GA_EngineRoom_RECARO.png",
+    "TextureReplacements/Environment/GarageAds/GA_Garage_Calendars_MagnaFlow_Cadillac_2026.png",
+    "TextureReplacements/Environment/GarageAds/GA_Garage_Pirelli_Vertical.png",
+    "TextureReplacements/Environment/GarageAds/GA_Exterior_BFGoodrich_Enkei.png",
+    "TextureReplacements/Environment/GarageAds/GA_WallAtlas_1_3_MANN_NGK.png",
+    "TextureReplacements/Environment/GarageAds/GA_WallAtlas_2_4_Dodge_Chevrolet.png",
+    "TextureReplacements/Environment/GarageAds/GA_LifterAtlas_1_Jaguar_2_2_Huayra_1.png",
+    "TextureReplacements/Environment/GarageAds/GA_Lifter_3_Continental_1.png",
+    "TextureReplacements/Environment/GarageAds/GA_GaragePaint_4_BuickRiviera71_1_Porsche.png",
+    "TextureReplacements/Environment/GarageAds/GA_PathTest_Lemforder_GKN.png",
+    "TextureReplacements/Environment/GarageAds/GA_PathTest_Sachs_SKF.png",
+    "TextureReplacements/Environment/GarageAds/GA_PathTest_Bilstein.png",
+    "TextureReplacements/Environment/GarageAds/GA_PathTest_Brembo_1.png",
+    "TextureReplacements/Environment/GarageAds/GA_PathTest_Brembo_2.png",
+    "TextureReplacements/Environment/GarageAds/GA_PathTest_SKF_2.png"
 )
 
 function Get-ProjectLibraryReferences {
